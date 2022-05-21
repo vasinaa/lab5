@@ -1,0 +1,35 @@
+
+
+name: lab_04_actions
+
+on:
+  
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  
+  build:
+  
+    runs-on: ubuntu-latest
+
+    steps:
+  
+      - uses: actions/checkout@v3
+
+      
+      - name: test_formatter_lib
+      working-directory: formatter_lib
+      shell: bash
+        run: |
+          cmake -H. -B_build
+          cmake --buld _build
+
+      
+      - name: test_formater_ex_lib
+      working directory: formatter_ex_lib
+      shell: bash
+        run: |
+          cmake -H. -B_build
+          cmake --build _build
