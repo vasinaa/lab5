@@ -1,12 +1,10 @@
 
 
-name: lab_04_actions
+name: 'lab_04_actions'
 
 on:
   
   push:
-    branches: [ main ]
-  pull_request:
     branches: [ main ]
 jobs:
   
@@ -16,9 +14,13 @@ jobs:
 
     steps:
   
-      - uses: actions/checkout@v3
+      - name: Git clone
+        uses: actions/checkout@v3
+        -name: Git checkout 
+        run: git checkout main
+        -name: Git pull 
+        run: git pull origin main
 
-      
       - name: test_formatter_lib
       working-directory: formatter_lib
       shell: bash
@@ -33,3 +35,10 @@ jobs:
         run: |
           cmake -H. -B_build
           cmake --build _build
+     - name: test_hello_world_app
+       working-directory: hello_world_application
+       shell: bash
+       run: |
+               cmake -H. -B_build
+               cmake --build _build
+
