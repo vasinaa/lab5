@@ -9,50 +9,49 @@ jobs:
   build:
     runs-on: ubuntu-latest
     
-    steps:
-    - name: checkout
-      uses: actions/checkout@v3
+    steps: 
+    -  uses: actions/checkout@v3
       
-    - name: Build banking
+    - name: update 
+      run:
+          git submodule update --init
+          sudo apt install lcov 
+          sudo apt install g++-7
+             
+      
+    - name: build_bank
       shell: bash
       run: |
-        git submodule update -init --recursive 
-        cd banking
-        cmake -H. -B_build 
-        cmake --build _build
-  testing:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      
-      
-      
-      - name: update &install
-        run: |
-          git submodule update --init
-          sudo apt install lcov && sudo apt install g++-7
-        shell: bash
-      
-      
-      - name: startCov
-        run: |
-          mkdir _build && cd _build
-          CXX=/usr/bin/g++-7 cmake -DCOVERAGE=1 ..
-          cmake --build
+          cd banking
+          mkdir build && cd build
+          cmake ..
+          cmake --build .
+          
+    - name: test_bank
+      run: |
+          mkdir build && cd build
+          CXX=/usr/bin/g++
+          cmake -DCOVERAGE=1 ..
+          cmake --build .
           ./test
-          lcov -t "banking" lcov.info -c -d .
-          lcov --remove lcov.info '/home/runner/work/lab5/lab5/third-party/gtest/*'  lcov.info
-          lcov --remove lcov.info '/usr/include/*'  lcov.info
-        
-        shell: bash
-      
-      
-      - name: final
-        uses: coverallsapp/github-action@master
-        with: 
+          lcov -t "banking" -o lcov.info -c -d .
+          lcov --remove lcov.info '/home/runner/work/lab5/lab5/third-party/gtest/*' -o lcov.info ###
+          
+          
+            
+    - name: cov_b
+      uses: coverallsapp/github-action@master
+      with: 
          github-token: ${{ secrets.github_token }}
-         path-to-lcov: ./_build/lcov.info
+         parallel: true
+         path-to-lcov: ./build/lcov.info
          coveralls-endpoint: https://coveralls.io
+         
+    - name: cov_f
+      uses: coverallsapp/github-action@master
+      with: 
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
        
      
         
