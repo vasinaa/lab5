@@ -1,19 +1,23 @@
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 2.8.8)
 
-set(COVERAGE OFF CACHE BOOL "Coverage")
-set(CMAKE_CXX_COMPILER "/usr/bin/g++")
+if (POLICY CMP0048)
+  cmake_policy(SET CMP0048 NEW)
+endif (POLICY CMP0048)
 
-project(TestRunning)
+project(googletest-distribution)
+set(GOOGLETEST_VERSION 1.9.0)
 
-add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/third-party/gtest" "gtest")
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/banking)
-add_executable(test ${CMAKE_CURRENT_SOURCE_DIR}/tests/test.cpp)
+enable_testing()
 
-if (COVERAGE)
-	target_compile_options(test PRIVATE --coverage)
-	target_link_libraries(test PRIVATE --coverage)
+include(CMakeDependentOption)
+include(GNUInstallDirs)
+
+#Note that googlemock target already builds googletest
+option(BUILD_GMOCK "Builds the googlemock subproject" ON)
+option(INSTALL_GTEST "Enable installation of googletest. (Projects embedding googletest may want to turn this OFF.)" ON)
+
+if(BUILD_GMOCK)
+  add_subdirectory( googlemock )
+else()
+  add_subdirectory( googletest )
 endif()
-
-target_include_directories(test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/banking)
-target_link_libraries(test PRIVATE gtest gtest_main gmock_main banking )
-
