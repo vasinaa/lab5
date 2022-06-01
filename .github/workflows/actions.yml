@@ -33,7 +33,6 @@ jobs:
           CXX=/usr/bin/g++
           cmake -DCOVERAGE=1 ..
           cmake --build .
-          ./test
           lcov -t "banking" -o lcov.info -c -d .
           lcov --remove lcov.info '/home/runner/work/lab5/lab5/third-party/gtest/*' -o lcov.info ###
           
