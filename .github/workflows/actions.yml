@@ -12,11 +12,11 @@ jobs:
     steps: 
     -  uses: actions/checkout@v3
       
-    - name: update 
-      run:
-          git submodule update --init
-          sudo apt install lcov 
-          sudo apt install g++-7
+   # - name: update 
+    #  run:
+     #     git submodule update --init
+      #    sudo apt install lcov 
+       #   sudo apt install g++-7
              
       
     - name: build_bank
