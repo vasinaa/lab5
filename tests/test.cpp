@@ -120,8 +120,8 @@ TEST(Transaction, Make){
     Acc_Trans.Make(Human1, Human2, 2000);
 
     EXPECT_NE(Acc_Trans.fee(), 350);
-    EXPECT_EQ(Human1.GetBalance(), 7500);
-    EXPECT_EQ(Human2.GetBalance(), 232000);
+    EXPECT_EQ(Human1.GetBalance(), 10000);
+    EXPECT_EQ(Human2.GetBalance(), 229500);
     ASSERT_EQ(Acc_Trans.Make(Organisation, Human2, 20000), false);
 }
 
