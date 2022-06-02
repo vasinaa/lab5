@@ -1,6 +1,7 @@
 name: cov
 on: 
   push:
+jobs:
     Build:
       runs-on: ubuntu-20.04
       steps:
@@ -13,8 +14,9 @@ on:
           
         - name: update
           shell: bash
-          run: git submodule update --init
-          sudo apt install lcov && sudo apt install g++-7
+          run: |
+            git submodule update --init
+            sudo apt install lcov && sudo apt install g++-7
           
         - name: cov1
           shell: bash
@@ -25,5 +27,5 @@ on:
           with: 
             github-token: ${{ secrets.github_token }}
             path-to-lcov: ./_build/lcov.info
-            coveralls-endpoint: https://coveralls.info
+            coveralls-endpoint: https://coveralls.io
         
